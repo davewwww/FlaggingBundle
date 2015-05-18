@@ -2,8 +2,8 @@
 
 namespace Dwo\FlaggingBundle\Tests\Fixtures;
 
-use Dwo\TaggedServices\DependencyInjection\Compiler\TaggedServicesPass;
 use Dwo\FlaggingBundle\DependencyInjection\DwoFlaggingExtension;
+use Dwo\TaggedServices\DependencyInjection\Compiler\TaggedServicesPass;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
@@ -53,5 +53,4 @@ class Container
 
         return $container;
     }
-
 }

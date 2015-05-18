@@ -2,9 +2,6 @@
 
 namespace Dwo\FlaggingBundle\Tests\Functional;
 
-use Dwo\Flagging\Context\Context;
-use Dwo\Flagging\FeatureDeciderInterface;
-use Dwo\Flagging\Model\FeatureManagerInterface;
 use Dwo\FlaggingBundle\Tests\DependencyInjection;
 use Dwo\FlaggingBundle\Tests\Fixtures\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

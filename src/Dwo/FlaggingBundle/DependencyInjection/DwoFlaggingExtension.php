@@ -22,6 +22,7 @@ class DwoFlaggingExtension extends Extension
         $loader->load('decider.yml');
         $loader->load('manager.yml');
         $loader->load('voter.yml');
+        $loader->load('flagging_voter.yml');
 
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
@@ -30,6 +31,5 @@ class DwoFlaggingExtension extends Extension
         $container->setAlias('dwo_flagging.manager.voter', $config['manager']['voter']);
 
         $container->setParameter('dwo_flagging.features', $config['features']);
-
     }
 }

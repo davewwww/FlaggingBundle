@@ -34,10 +34,8 @@ class FeatureDeciderTest extends AbstractContainerTestCase
         return array(
             array(true, 'feature', ''),
             array(true, 'feature', 'foo'),
-
             array(true, 'feature_foo', 'foo'),
             array(false, 'feature_foo', 'bar'),
-
             array(false, 'feature_not_foo_or_bar', 'foo'),
             array(false, 'feature_not_foo_or_bar', 'bar'),
             array(false, 'feature_not_foo_or_bar', 'foobar'),

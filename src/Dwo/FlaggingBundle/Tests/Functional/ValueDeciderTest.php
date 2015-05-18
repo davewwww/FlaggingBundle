@@ -35,13 +35,10 @@ class ValueDeciderTest extends AbstractContainerTestCase
     {
         return array(
             array(null, 'foo', ''),
-
             array(5, 'feature_value', ''),
             array(5, 'feature_value', 'foo'),
-
             array(5, 'feature_values', ''),
             array(1, 'feature_values', 'foo'),
-
             array(4, 'feature_filters_and_values', 'foo'),
             array(5, 'feature_filters_and_values', 'bar'),
             array(null, 'feature_filters_and_values', 'foobar'),

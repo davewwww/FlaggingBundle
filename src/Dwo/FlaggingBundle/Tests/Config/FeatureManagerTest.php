@@ -4,7 +4,6 @@ namespace Dwo\FlaggingBundle\Tests\Config;
 
 use Dwo\Flagging\Model\Feature;
 use Dwo\Flagging\Model\FilterCollectionInterface;
-use Dwo\Flagging\Model\FilterInterface;
 use Dwo\FlaggingBundle\Config\FeatureManager;
 
 class FeatureManagerTest extends \PHPUnit_Framework_TestCase

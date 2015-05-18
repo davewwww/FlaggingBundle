@@ -8,4 +8,4 @@ services:
     class: Dwo\FlaggingBundle\Config\VoterManager
     arguments: [[]]
     tags:
-      - { name: 'tagged_services', find_tag: "dwo_flagging.voters" }
+      - { name: 'tagged_services', find_tag: "dwo_flagging.voters", lazy: true }

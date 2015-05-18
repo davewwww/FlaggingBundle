@@ -2,11 +2,7 @@
 
 namespace Dwo\FlaggingBundle\Tests\Config;
 
-use Dwo\Flagging\Model\Feature;
-use Dwo\Flagging\Model\FilterCollectionInterface;
-use Dwo\Flagging\Model\FilterInterface;
 use Dwo\Flagging\Tests\Fixtures\NameVoter;
-use Dwo\FlaggingBundle\Config\FeatureManager;
 use Dwo\FlaggingBundle\Config\VoterManager;
 
 class VoteManagerTest extends \PHPUnit_Framework_TestCase
@@ -27,5 +23,4 @@ class VoteManagerTest extends \PHPUnit_Framework_TestCase
         $manager = new VoterManager(array());
         $manager->getVoter('name');
     }
-
 }
