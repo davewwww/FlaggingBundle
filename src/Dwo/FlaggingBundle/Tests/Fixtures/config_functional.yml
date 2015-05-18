@@ -1,0 +1,53 @@
+dwo_flagging:
+
+  features:
+
+    feature: ~
+
+    feature_foo:
+      filters:
+        -
+          name: ["foo"]
+
+    feature_foo_or_bar:
+      filters:
+        -
+          name: ["foo"]
+        -
+          name: ["bar"]
+
+
+    feature_not_foo_or_bar:
+      breaker:
+        - name: ["foo","bar"]
+      filters:
+        -
+          name: ["lorem", "!foobar"]
+
+    feature_value:
+      values:
+        -
+          value: 5
+
+    feature_values:
+      values:
+        -
+          filters:
+            -
+              name: ["foo"]
+          value: 1
+        -
+          value: 5
+          
+    feature_filters_and_values:
+      breaker:
+        -
+          name: ["foobar"]
+      values:
+        -
+          filters:
+            -
+              name: ["foo"]
+          value: 4
+        -
+          value: 5

@@ -1,0 +1,67 @@
+dwo_flagging:
+
+  features:
+
+    foo: ~
+
+    foo_filter:
+      filters:
+        -
+          emails: ["user@domain.com"]
+
+    foo_filters:
+      filters:
+        -
+          countries: ["DE"]
+        -
+          countries: ["!US"]
+
+    foo_breaker:
+       breaker:
+         - emails: ["user@domain.com"]
+       filters:
+         -
+           countries: ["DE"]
+         -
+           countries: ["US"]
+
+    foo_value:
+      values:
+        -
+          value: 5
+
+    foo_value_array:
+      values:
+        -
+          value: [5, 4]
+
+    foo_value_obj:
+      values:
+        -
+          value: {'foo':'bar', 'lorem': [4, 5]}
+
+    foo_values:
+      values:
+        -
+          filters:
+            -
+              countries: ["US"]
+          value: 1
+        -
+          value: 5
+          
+    foo_filters_and_values:
+      filters:
+        -
+          emails: ["user@domain.com", "user2@domain.com"]
+          countries: ["!DE"]
+        -
+          countries: ["US"]
+      values:
+        -
+          filters:
+            -
+              countries: ["US"]
+          value: 4
+        -
+          value: 5

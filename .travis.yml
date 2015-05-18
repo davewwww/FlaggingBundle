@@ -1,0 +1,22 @@
+language: php
+
+php:
+  - 5.4
+  - 5.5
+  - 5.6
+  - hhvm
+
+install:
+  - if [[ $TRAVIS_PHP_VERSION = '5.6' ]]; then composer require satooshi/php-coveralls:~0.6@stable ; fi
+
+before_script:
+  - if [[ $TRAVIS_PHP_VERSION = '5.6' ]]; then PHPUNIT_FLAGS="--coverage-clover ./build/logs/clover.xml"; else PHPUNIT_FLAGS=""; fi
+  - composer self-update
+  - composer install
+  - mkdir -p build/logs
+
+script:
+  - phpunit $PHPUNIT_FLAGS
+
+after_script:
+  - sh -c 'if [ "$TRAVIS_PHP_VERSION" = "5.6" ]; then php vendor/bin/coveralls -v; fi;'

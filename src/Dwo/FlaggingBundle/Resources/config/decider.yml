@@ -1,0 +1,9 @@
+services:
+
+  dwo_flagging.feature_decider:
+    class: Dwo\Flagging\FeatureDecider
+    arguments: ["@dwo_flagging.manager.feature", "@dwo_flagging.voter.feature"]
+
+  dwo_flagging.value_decider:
+    class: Dwo\Flagging\ValueDecider
+    arguments: ["@dwo_flagging.manager.feature", "@dwo_flagging.feature_decider", "@dwo_flagging.voter.filter_groups"]

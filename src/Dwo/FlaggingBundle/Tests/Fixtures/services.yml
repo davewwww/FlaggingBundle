@@ -1,0 +1,6 @@
+services:
+
+  dwo_flagging.test.voter.name:
+    class: Dwo\FlaggingBundle\Tests\Fixtures\NameVoter
+    tags:
+      - { name: 'dwo_flagging.voters', type: "name" }

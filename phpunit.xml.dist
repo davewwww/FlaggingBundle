@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit bootstrap="vendor/autoload.php" colors="true">
+    <testsuites>
+        <testsuite name="Dwo Flagging Bundle Test Suite">
+            <directory>src/</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory suffix=".php">src/Dwo</directory>
+            <exclude>
+                <directory>src/Dwo/*/Tests</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+</phpunit>

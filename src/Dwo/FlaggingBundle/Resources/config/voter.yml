@@ -1,0 +1,21 @@
+services:
+
+  dwo_flagging.voter.feature:
+    class: Dwo\Flagging\Voter\FeatureVoter
+    arguments: ["@dwo_flagging.voter.filter_groups"]
+
+  dwo_flagging.voter.filter_groups:
+    class: Dwo\Flagging\Voter\FilterGroupsVoter
+    arguments: ["@dwo_flagging.voter.filters"]
+
+  dwo_flagging.voter.filters:
+    class: Dwo\Flagging\Voter\EntriesAndVoter
+    arguments: ["@dwo_flagging.voter.filter.cached"]
+
+  dwo_flagging.voter.filter:
+    class: Dwo\Flagging\Voter\FilterVoter
+    arguments: ["@dwo_flagging.manager.voter"]
+
+  dwo_flagging.voter.filter.cached:
+    class: Dwo\Flagging\Voter\CachedFilterVoter
+    arguments: ["@dwo_flagging.voter.filter"]
