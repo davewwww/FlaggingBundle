@@ -20,3 +20,14 @@ services:
     arguments: ["@dwo_flagging.feature_decider"]
     tags:
       - { name: 'dwo_flagging.voters', type: "feature" }
+
+  dwo_flagging_voters.voter.enabled:
+    class: Dwo\FlaggingVoters\Voters\EnabledVoter
+    tags:
+      - { name: 'dwo_flagging.voters', type: "enabled" }
+
+  dwo_flagging_voters.voter.environment:
+    class: Dwo\FlaggingVoters\Voters\StringVoter
+    arguments: ["%kernel.environment%"]
+    tags:
+      - { name: 'dwo_flagging.voters', type: "environment" }
