@@ -25,6 +25,7 @@ class Configuration implements ConfigurationInterface
 
                 ->arrayNode('manager')
                     ->addDefaultsIfNotSet()
+
                     ->children()
                         ->scalarNode('feature')->defaultValue('dwo_flagging.manager.feature.config')->end()
                         ->scalarNode('voter')->defaultValue('dwo_flagging.manager.voter.config')->end()
@@ -35,7 +36,7 @@ class Configuration implements ConfigurationInterface
                  *  Features
                  */
                 ->arrayNode('features')
-                    ->performNoDeepMerging()
+                    ->useAttributeAsKey('name')
                     ->prototype('array')
                         ->children()
 
@@ -43,6 +44,7 @@ class Configuration implements ConfigurationInterface
                              *  Breaker for Feature
                              */
                             ->arrayNode('breaker')
+                                ->performNoDeepMerging()
                                 ->prototype('array')
                                     ->prototype('array')
                                         ->prototype('variable')->end()
@@ -54,7 +56,9 @@ class Configuration implements ConfigurationInterface
                              *  Filter for Feature
                              */
                             ->arrayNode('filters')
+                                ->performNoDeepMerging()
                                 ->prototype('array')
+                                    ->useAttributeAsKey('filter')
                                     ->prototype('array')
                                         ->prototype('variable')->end()
                                     ->end()
@@ -67,6 +71,7 @@ class Configuration implements ConfigurationInterface
                              *  Values for Feature
                              */
                             ->arrayNode('values')
+                                ->performNoDeepMerging()
                                 ->prototype('array')
                                     ->children()
 

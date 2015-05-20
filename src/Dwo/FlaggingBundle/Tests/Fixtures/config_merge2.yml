@@ -7,6 +7,11 @@ dwo_flagging:
         -
           emails: ["foo@domain.com"]
 
+    merged_filters2:
+      filters:
+        -
+          foo: ["bar"]
+
     merged_breaker:
       breaker:
         -

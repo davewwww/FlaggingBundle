@@ -29,8 +29,14 @@ class FlaggingExtensionTest extends \PHPUnit_Framework_TestCase
 
         $features = $container->getParameter('dwo_flagging.features');
 
+        $this->assertArrayHasKey('feature', $features);
+        $this->assertEquals([['emails' => ['bar@domain.com']]], $features['feature']['filters']);
+
         $this->assertArrayHasKey('merged_filters', $features);
         $this->assertEquals([['emails' => ['foo@domain.com']]], $features['merged_filters']['filters']);
+
+        $this->assertArrayHasKey('merged_filters2', $features);
+        $this->assertEquals([['foo' => ['bar']]], $features['merged_filters2']['filters']);
 
         $this->assertArrayHasKey('merged_breaker', $features);
         $this->assertEquals([['emails' => ['foo@domain.com']]], $features['merged_breaker']['breaker']);
