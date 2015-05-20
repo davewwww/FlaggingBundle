@@ -35,7 +35,7 @@ class Configuration implements ConfigurationInterface
                  *  Features
                  */
                 ->arrayNode('features')
-                    ->useAttributeAsKey('name')
+                    ->performNoDeepMerging()
                     ->prototype('array')
                         ->children()
 
@@ -44,7 +44,6 @@ class Configuration implements ConfigurationInterface
                              */
                             ->arrayNode('breaker')
                                 ->prototype('array')
-                                    ->useAttributeAsKey('filter')
                                     ->prototype('array')
                                         ->prototype('variable')->end()
                                     ->end()
@@ -56,7 +55,6 @@ class Configuration implements ConfigurationInterface
                              */
                             ->arrayNode('filters')
                                 ->prototype('array')
-                                    ->useAttributeAsKey('filter')
                                     ->prototype('array')
                                         ->prototype('variable')->end()
                                     ->end()
@@ -82,7 +80,6 @@ class Configuration implements ConfigurationInterface
                                          */
                                         ->arrayNode('filters')
                                             ->prototype('array')
-                                                ->useAttributeAsKey('filter')
                                                 ->prototype('array')
                                                     ->prototype('variable')->end()
                                                 ->end()

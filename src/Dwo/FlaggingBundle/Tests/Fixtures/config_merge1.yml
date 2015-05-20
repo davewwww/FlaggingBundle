@@ -1,0 +1,24 @@
+dwo_flagging:
+
+  features:
+
+    merged_filters:
+      filters:
+        -
+          emails: ["bar@domain.com"]
+          foo: ["bar"]
+
+    merged_breaker:
+      breaker:
+        -
+          emails: ["bar@domain.com"]
+        -
+          foo: ["bar"]
+
+    merged_value:
+      values:
+        -
+          value: ["bar"]
+          filters:
+            -
+              emails: ["bar@domain.com"]
