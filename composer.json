@@ -19,7 +19,7 @@
     "symfony/http-kernel" : "~2.4",
     "dwo/tagged_services": "~1.0",
     "dwo/flagging": "^0.2.2",
-    "dwo/flagging_voters": "~1.0.2"
+    "dwo/flagging_voters": "~1.0.3"
   },
   "autoload": {
     "psr-0": {"Dwo\\FlaggingBundle": "src/"}
