@@ -2,7 +2,6 @@
 
 namespace Dwo\FlaggingBundle\Tests\Fixtures;
 
-use Doctrine\Bundle\DoctrineCacheBundle\DependencyInjection\DoctrineCacheExtension;
 use Dwo\FlaggingBundle\DependencyInjection\DwoFlaggingExtension;
 use Dwo\TaggedServices\DependencyInjection\Compiler\TaggedServicesPass;
 use Symfony\Component\Config\FileLocator;
@@ -46,7 +45,6 @@ class Container
     {
         $container = self::createContainer($data);
         $container->registerExtension(new DwoFlaggingExtension());
-        $container->registerExtension(new DoctrineCacheExtension());
 
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__));
         foreach ($configs as $config) {
