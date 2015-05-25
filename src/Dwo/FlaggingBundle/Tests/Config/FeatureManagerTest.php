@@ -1,66 +1,121 @@
 <?php
 
-namespace Dwo\FlaggingBundle\Tests\Config;
+namespace Dwo\FlaggingBundle\Tests\Cache;
 
+use Doctrine\Common\Cache\Cache;
 use Dwo\Flagging\Model\Feature;
-use Dwo\Flagging\Model\FilterCollectionInterface;
-use Dwo\FlaggingBundle\Config\FeatureManager;
+use Dwo\Flagging\Model\FeatureManagerInterface;
+use Dwo\FlaggingBundle\Cache\FeatureManager;
 
 class FeatureManagerTest extends \PHPUnit_Framework_TestCase
 {
-    protected static $config;
+    public function testCacheSave()
+    {
+        $cache = $this->mockCache();
+        $delegatedManager = $this->mockFeatureManager();
+
+        $cache->expects(self::once())
+            ->method('contains')
+            ->willReturn(false);
+
+        $cache->expects(self::never())
+            ->method('fetch');
+
+        $cache->expects(self::once())
+            ->method('save');
+
+        $delegatedManager->expects(self::once())
+            ->method('findFeatureByName')
+            ->with('foo')
+            ->willReturn($feature = new Feature('foo'));
+
+        $manager = new FeatureManager($cache, $delegatedManager);
+        $result = $manager->findFeatureByName('foo');
+
+        self::assertEquals($result, $feature);
+    }
 
     /**
-     * @beforeClass
+     * @dataProvider providerCount
      */
-    public static function init()
+    public function testCacheRead($count)
     {
-        self::$config = array(
-            'foo' => array(
-                'filters' => array(
-                    array('emails' => ['user@domain.com'])
-                ),
-            )
+        $cache = $this->mockCache();
+        $delegatedManager = $this->mockFeatureManager();
+
+        $cache->expects(self::once())
+            ->method('contains')
+            ->willReturn(true);
+
+        $cache->expects(self::once())
+            ->method('fetch')
+            ->willReturn([]);
+
+        $cache->expects(self::never())
+            ->method('save');
+
+        $delegatedManager->expects(self::never())
+            ->method('findFeatureByName');
+
+        $manager = new FeatureManager($cache, $delegatedManager);
+
+        for($x=1;$x<=$count;$x++) {
+            $feature = $manager->findFeatureByName('foo');
+
+            self::assertInstanceOf('Dwo\Flagging\Model\FeatureInterface', $feature);
+            self::assertEquals('foo', $feature->getName());
+        }
+    }
+
+    public function providerCount()
+    {
+        return array(
+            array(1),
+            array(2),
         );
     }
 
-    public function testFindFeatureByName()
+    public function testCacheReadNotFound()
     {
-        $manager = new FeatureManager(self::$config);
-        $feature = $manager->findFeatureByName('foo');
+        $cache = $this->mockCache();
+        $delegatedManager = $this->mockFeatureManager();
 
-        self::assertInstanceOf('Dwo\Flagging\Model\FeatureInterface', $feature);
-        self::assertEquals('foo', $feature->getName());
+        $cache->expects(self::once())
+            ->method('contains')
+            ->willReturn(false);
+
+        $cache->expects(self::never())
+            ->method('fetch');
+
+        $cache->expects(self::never())
+            ->method('save');
+
+        $delegatedManager->expects(self::once())
+            ->method('findFeatureByName')
+            ->with('foo')
+            ->willReturn(null);
+
+        $manager = new FeatureManager($cache, $delegatedManager);
+        $result = $manager->findFeatureByName('foo');
+
+        self::assertNull($result);
     }
 
-    public function testFindFeatureByNameError()
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|FeatureManagerInterface
+     */
+    protected function mockFeatureManager()
     {
-        $manager = new FeatureManager(self::$config);
-        $feature = $manager->findFeatureByName('bar');
-
-        self::assertNull($feature);
+        return $this->getMockBuilder('Dwo\Flagging\Model\FeatureManagerInterface')->getMock();
     }
 
-    public function testFindAll()
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|Cache
+     */
+    protected function mockCache()
     {
-        $manager = new FeatureManager(self::$config);
-        $features = $manager->findAllFeatures();
-        self::assertCount(1, $features);
-
-        self::assertArrayHasKey('foo', $features);
-        self::assertInstanceOf('Dwo\Flagging\Model\FeatureInterface', $features['foo']);
-
-        $feature = $features['foo'];
-        self::assertEquals('foo', $feature->getName());
-    }
-
-    public function testSaveFeature()
-    {
-        $feature = new Feature('bar');
-
-        $manager = new FeatureManager(self::$config);
-        $manager->saveFeature($feature);
-
-        self::assertEquals($feature, $manager->findFeatureByName('bar'));
+        return $this->getMockBuilder('Doctrine\Common\Cache\Cache')
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 }
