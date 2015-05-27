@@ -20,8 +20,10 @@
     "symfony/console": "~2.4",
     "doctrine/cache": "^1.4",
     "dwo/tagged_services": "~1.0",
-    "dwo/flagging": "dev-master as v0.2.2",
-    "dwo/flagging_voters": "~1.0"
+    "dwo/flagging": "dev-master as v0.2.3",
+    "dwo/flagging_voters": "~1.0",
+    "dwo/config_prototype": "dev-master@dev",
+    "dwo/config_prototype_bundle": "dev-master@dev"
   },
   "autoload": {
     "psr-0": {"Dwo\\FlaggingBundle": "src/"}

@@ -39,4 +39,12 @@ class VoterManager implements VoterManagerInterface
 
         return $this->voters[$name];
     }
+
+    /**
+     * @return VoterInterface[]
+     */
+    public function getAllVoters()
+    {
+        return $this->voters;
+    }
 }

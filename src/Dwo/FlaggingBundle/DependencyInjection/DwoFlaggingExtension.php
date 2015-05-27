@@ -22,6 +22,8 @@ class DwoFlaggingExtension extends Extension
         $loader->load('decider.yml');
         $loader->load('manager.yml');
         $loader->load('voter.yml');
+        $loader->load('validator.yml');
+        $loader->load('handler.yml');
         $loader->load('flagging_voter.yml');
 
         $configuration = new Configuration();

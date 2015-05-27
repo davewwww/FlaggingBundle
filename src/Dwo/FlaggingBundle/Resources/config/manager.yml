@@ -9,3 +9,7 @@ services:
     arguments: [[]]
     tags:
       - { name: 'tagged_services', find_tag: "dwo_flagging.voters", lazy: true }
+
+  dwo_flagging.manager.feature.config_prototype:
+    class: Dwo\FlaggingBundle\Cache\ConfigPrototypeManager
+    arguments: ["@dwo_flagging.cache.flagging.db"]
