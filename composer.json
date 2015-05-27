@@ -20,7 +20,7 @@
     "symfony/console": "~2.4",
     "doctrine/cache": "^1.4",
     "dwo/tagged_services": "~1.0",
-    "dwo/flagging": "dev-master as v0.2.3",
+    "dwo/flagging": "dev-master@dev",
     "dwo/flagging_voters": "~1.0",
     "dwo/config_prototype": "dev-master@dev",
     "dwo/config_prototype_bundle": "dev-master@dev"
@@ -31,5 +31,10 @@
   "require-dev": {
     "phpunit/phpunit": "~4.6",
     "symfony/expression-language" : "~2.4"
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "0.2.6-dev"
+    }
   }
 }
