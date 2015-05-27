@@ -4,6 +4,7 @@ namespace Dwo\FlaggingBundle\Cache;
 
 use Doctrine\Common\Cache\CacheProvider;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception\TableNotFoundException;
 use Doctrine\DBAL\Schema\Column;
 use Doctrine\DBAL\Schema\Index;
 use Doctrine\DBAL\Schema\Table;
@@ -82,7 +83,7 @@ class DbalCache extends CacheProvider
                     implode(',', $this->getFields())
                 )
             );
-        } catch (\Doctrine\DBAL\Exception\TableNotFoundException $e) {
+        } catch (TableNotFoundException $e) {
             if ($catched) {
                 throw $e;
             }
@@ -184,7 +185,7 @@ class DbalCache extends CacheProvider
                     $id
                 )
             );
-        } catch (\Doctrine\DBAL\Exception\TableNotFoundException $e) {
+        } catch (TableNotFoundException $e) {
             return null;
         }
 
