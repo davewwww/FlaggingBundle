@@ -4,7 +4,6 @@ namespace Dwo\FlaggingBundle\Cache;
 
 use Doctrine\Common\Cache\CacheProvider;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception\TableNotFoundException;
 use Doctrine\DBAL\Schema\Column;
 use Doctrine\DBAL\Schema\Index;
 use Doctrine\DBAL\Schema\Table;
@@ -83,7 +82,13 @@ class DbalCache extends CacheProvider
                     implode(',', $this->getFields())
                 )
             );
-        } catch (TableNotFoundException $e) {
+
+            $statement->bindValue(':id', $id);
+            $statement->bindValue(':data', json_encode($data));
+            $statement->bindValue(':expire', $lifeTime > 0 ? time() + $lifeTime : null);
+
+            return $statement->execute();
+        } catch (\Doctrine\DBAL\Exception\TableNotFoundException $e) {
             if ($catched) {
                 throw $e;
             }
@@ -91,12 +96,6 @@ class DbalCache extends CacheProvider
 
             return $this->doSave($id, $data, $lifeTime, true);
         }
-
-        $statement->bindValue(':id', $id);
-        $statement->bindValue(':data', json_encode($data));
-        $statement->bindValue(':expire', $lifeTime > 0 ? time() + $lifeTime : null);
-
-        return $statement->execute();
     }
 
     /**
@@ -185,11 +184,11 @@ class DbalCache extends CacheProvider
                     $id
                 )
             );
-        } catch (TableNotFoundException $e) {
+
+            $statement->execute();
+        } catch (\Doctrine\DBAL\Exception\TableNotFoundException $e) {
             return null;
         }
-
-        $statement->execute();
 
         $item = $statement->fetch();
 
