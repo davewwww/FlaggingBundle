@@ -22,8 +22,7 @@
     "dwo/tagged_services": "~1.0",
     "dwo/flagging": "0.2.*@dev",
     "dwo/flagging_voters": "~1.0",
-    "dwo/config_prototype": "dev-master@dev",
-    "dwo/config_prototype_bundle": "dev-master@dev"
+    "dwo/config_prototype_bundle": "1.0.*@dev"
   },
   "autoload": {
     "psr-0": {"Dwo\\FlaggingBundle": "src/"}
@@ -32,6 +31,7 @@
     "phpunit/phpunit": "~4.6",
     "symfony/expression-language" : "~2.4"
   },
+  "minimum-stability": "dev",
   "extra": {
     "branch-alias": {
       "dev-master": "0.2-dev"
