@@ -4,6 +4,10 @@ namespace Dwo\FlaggingBundle\Cache;
 
 use Doctrine\Common\Cache\CacheProvider;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Schema\Column;
+use Doctrine\DBAL\Schema\Index;
+use Doctrine\DBAL\Schema\Table;
+use Doctrine\DBAL\Types\Type;
 
 /**
  * @author David Wolter <david@lovoo.com>
@@ -37,22 +41,12 @@ class DbalCache extends CacheProvider
     private $table;
 
     /**
-     * Constructor.
+     * Constructor.k
      */
     public function __construct(Connection $connection, $table)
     {
         $this->connection = $connection;
-        $this->table  = (string) $table;
-
-        list($id, $data, $exp) = $this->getFields();
-
-        return $this->connection->exec(sprintf(
-            'CREATE TABLE IF NOT EXISTS %s(%s TEXT PRIMARY KEY NOT NULL, %s BLOB, %s INTEGER)',
-            $table,
-            $id,
-            $data,
-            $exp
-        ));
+        $this->table = (string) $table;
     }
 
     /**
@@ -61,7 +55,7 @@ class DbalCache extends CacheProvider
     protected function doFetch($id)
     {
         if ($item = $this->findById($id)) {
-            return json_decode($item[self::DATA_FIELD],1);
+            return json_decode($item[self::DATA_FIELD], 1);
         }
 
         return false;
@@ -78,13 +72,24 @@ class DbalCache extends CacheProvider
     /**
      * {@inheritdoc}
      */
-    protected function doSave($id, $data, $lifeTime = 0)
+    protected function doSave($id, $data, $lifeTime = 0, $catched = false)
     {
-        $statement = $this->connection->prepare(sprintf(
-            'INSERT OR REPLACE INTO %s (%s) VALUES (:id, :data, :expire)',
-            $this->table,
-            implode(',', $this->getFields())
-        ));
+        try {
+            $statement = $this->connection->prepare(
+                sprintf(
+                    'INSERT OR REPLACE INTO %s (%s) VALUES (:id, :data, :expire)',
+                    $this->table,
+                    implode(',', $this->getFields())
+                )
+            );
+        } catch (\Doctrine\DBAL\Exception\TableNotFoundException $e) {
+            if ($catched) {
+                throw $e;
+            }
+            $this->createTable();
+
+            return $this->doSave($id, $data, $lifeTime, true);
+        }
 
         $statement->bindValue(':id', $id);
         $statement->bindValue(':data', json_encode($data));
@@ -100,11 +105,13 @@ class DbalCache extends CacheProvider
     {
         list($idField) = $this->getFields();
 
-        $statement = $this->connection->prepare(sprintf(
-            'DELETE FROM %s WHERE %s = :id',
-            $this->table,
-            $idField
-        ));
+        $statement = $this->connection->prepare(
+            sprintf(
+                'DELETE FROM %s WHERE %s = :id',
+                $this->table,
+                $idField
+            )
+        );
 
         $statement->bindValue(':id', $id);
 
@@ -128,9 +135,32 @@ class DbalCache extends CacheProvider
     }
 
     /**
+     *
+     */
+    public function createTable()
+    {
+        list($id, $data, $exp) = $this->getFields();
+
+        $table = new Table(
+            $this->table,
+            array(
+                new Column($id, Type::getType('text'), array('NotNull' => true)),
+                new Column($data, Type::getType('blob'), array('Default' => 'NULL')),
+                new Column($exp, Type::getType('integer'), array('Default' => 'NULL')),
+            ),
+            array(
+                new Index($id, [$id], true, true)
+            )
+        );
+
+        $sm = $this->connection->getDriver()->getSchemaManager($this->connection);
+        $sm->createTable($table);
+    }
+
+    /**
      * Find a single row by ID.
      *
-     * @param mixed $id
+     * @param mixed   $id
      * @param boolean $includeData
      *
      * @return array|null
@@ -144,14 +174,20 @@ class DbalCache extends CacheProvider
             unset($fields[$key]);
         }
 
+        try {
+            $statement = $this->connection->prepare(
+                $a = sprintf(
+                    'SELECT %s FROM %s WHERE %s = "%s" LIMIT 1',
+                    implode(',', $fields),
+                    $this->table,
+                    $idField,
+                    $id
+                )
+            );
+        } catch (\Doctrine\DBAL\Exception\TableNotFoundException $e) {
+            return null;
+        }
 
-        $statement = $this->connection->prepare($a=sprintf(
-            'SELECT %s FROM %s WHERE %s = "%s" LIMIT 1',
-            implode(',', $fields),
-            $this->table,
-            $idField,
-            $id
-        ));
         $statement->execute();
 
         $item = $statement->fetch();
@@ -183,6 +219,7 @@ class DbalCache extends CacheProvider
      * Check if the item is expired.
      *
      * @param array $item
+     *
      * @return boolean
      */
     private function isExpired(array $item)
