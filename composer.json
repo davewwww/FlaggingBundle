@@ -20,7 +20,7 @@
     "symfony/console": "~2.4",
     "doctrine/cache": "^1.4",
     "dwo/tagged_services": "~1.0",
-    "dwo/flagging": "dev-master@dev",
+    "dwo/flagging": "0.2.*@dev",
     "dwo/flagging_voters": "~1.0",
     "dwo/config_prototype": "dev-master@dev",
     "dwo/config_prototype_bundle": "dev-master@dev"
@@ -34,7 +34,7 @@
   },
   "extra": {
     "branch-alias": {
-      "dev-master": "0.2.6-dev"
+      "dev-master": "0.2-dev"
     }
   }
 }
