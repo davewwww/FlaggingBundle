@@ -81,6 +81,7 @@ class DbalCache extends CacheProvider
             ->setParameter(':data', serialize($data))
             ->setParameter(':exp', $lifeTime > 0 ? time() + $lifeTime : null)
             ->setParameter(':id', $id);
+        $qbClone = clone $qb;
 
         try {
             if ($this->doContains($id)) {
@@ -100,13 +101,27 @@ class DbalCache extends CacheProvider
             }
 
             return $qb->execute();
-        } catch (\Doctrine\DBAL\Exception\TableNotFoundException $e) {
+        } /**
+         * Table not exists
+         */
+        catch (\Doctrine\DBAL\Exception\TableNotFoundException $e) {
             if ($catched) {
                 throw $e;
             }
             $this->createTable();
 
             return $this->doSave($id, $data, $lifeTime, true);
+        } /**
+         * Duplicate entry
+         */
+        catch (\Doctrine\DBAL\Exception\UniqueConstraintViolationException $e) {
+            $qb = clone $qbClone;
+            $qb->update($this->table)
+                ->set($dataField, ':data')
+                ->set($expField, ':exp')
+                ->where($idField.' = :id');
+
+            return $qb->execute();
         }
     }
 
