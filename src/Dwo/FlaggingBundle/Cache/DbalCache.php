@@ -41,7 +41,8 @@ class DbalCache extends CacheProvider
     private $table;
 
     /**
-     * Constructor.k
+     * @param Connection $connection
+     * @param string     $table
      */
     public function __construct(Connection $connection, $table)
     {
@@ -55,7 +56,7 @@ class DbalCache extends CacheProvider
     protected function doFetch($id)
     {
         if ($item = $this->findById($id)) {
-            return json_decode($item[self::DATA_FIELD], 1);
+            return unserialize($item[self::DATA_FIELD]);
         }
 
         return false;
@@ -66,7 +67,7 @@ class DbalCache extends CacheProvider
      */
     protected function doContains($id)
     {
-        return (boolean) $this->findById($id, false);
+        return (boolean) $this->findById($id);
     }
 
     /**
@@ -74,20 +75,31 @@ class DbalCache extends CacheProvider
      */
     protected function doSave($id, $data, $lifeTime = 0, $catched = false)
     {
+        list($idField, $dataField, $expField) = $this->getFields();
+
+        $qb = $this->connection->createQueryBuilder()
+            ->setParameter(':data', serialize($data))
+            ->setParameter(':exp', $lifeTime > 0 ? time() + $lifeTime : null)
+            ->setParameter(':id', $id);
+
         try {
-            $statement = $this->connection->prepare(
-                sprintf(
-                    'INSERT OR REPLACE INTO %s (%s) VALUES (:id, :data, :expire)',
-                    $this->table,
-                    implode(',', $this->getFields())
-                )
-            );
+            if ($this->doContains($id)) {
+                $qb->update($this->table)
+                    ->set($dataField, ':data')
+                    ->set($expField, ':exp')
+                    ->where($idField.' = :id');
+            } else {
+                $qb->insert($this->table)
+                    ->values(
+                        array(
+                            $idField   => ':id',
+                            $dataField => ':data',
+                            $expField  => ':exp',
+                        )
+                    );
+            }
 
-            $statement->bindValue(':id', $id);
-            $statement->bindValue(':data', json_encode($data));
-            $statement->bindValue(':expire', $lifeTime > 0 ? time() + $lifeTime : null);
-
-            return $statement->execute();
+            return $qb->execute();
         } catch (\Doctrine\DBAL\Exception\TableNotFoundException $e) {
             if ($catched) {
                 throw $e;
@@ -105,17 +117,12 @@ class DbalCache extends CacheProvider
     {
         list($idField) = $this->getFields();
 
-        $statement = $this->connection->prepare(
-            sprintf(
-                'DELETE FROM %s WHERE %s = :id',
-                $this->table,
-                $idField
-            )
-        );
+        $qb = $this->connection->createQueryBuilder()
+            ->delete($this->table)
+            ->setParameter(':id', $id)
+            ->where($idField.' = :id');
 
-        $statement->bindValue(':id', $id);
-
-        return $statement->execute();
+        return $qb->execute();
     }
 
     /**
@@ -123,7 +130,10 @@ class DbalCache extends CacheProvider
      */
     protected function doFlush()
     {
-        return $this->connection->exec(sprintf('DELETE FROM %s', $this->table));
+        $qb = $this->connection->createQueryBuilder()
+            ->delete($this->table);
+
+        return $qb->execute();
     }
 
     /**
@@ -135,64 +145,51 @@ class DbalCache extends CacheProvider
     }
 
     /**
-     *
+     * create a table
      */
-    public function createTable()
+    private function createTable()
     {
         list($id, $data, $exp) = $this->getFields();
 
-        $table = new Table(
-            $this->table,
-            array(
-                new Column($id, Type::getType('text'), array('NotNull' => true)),
-                new Column($data, Type::getType('blob'), array('Default' => 'NULL')),
-                new Column($exp, Type::getType('integer'), array('Default' => 'NULL')),
-            ),
-            array(
-                new Index($id, [$id], true, true)
+        $sm = $this->connection->getDriver()->getSchemaManager($this->connection);
+        $sm->createTable(
+            new Table(
+                $this->table,
+                array(
+                    new Column($id, Type::getType('string'), array('NotNull' => true, 'Length' => 256)),
+                    new Column($data, Type::getType('blob'), array('NotNull' => false, 'Default' => 'NULL')),
+                    new Column($exp, Type::getType('integer'), array('NotNull' => false, 'Default' => 'NULL')),
+                ),
+                array(
+                    new Index($id, [$id], true, true)
+                )
             )
         );
-
-        $sm = $this->connection->getDriver()->getSchemaManager($this->connection);
-        $sm->createTable($table);
     }
 
     /**
-     * Find a single row by ID.
-     *
-     * @param mixed   $id
-     * @param boolean $includeData
+     * @param mixed $id
      *
      * @return array|null
      */
-    private function findById($id, $includeData = true)
+    private function findById($id)
     {
         list($idField) = $fields = $this->getFields();
 
-        if (!$includeData) {
-            $key = array_search(static::DATA_FIELD, $fields);
-            unset($fields[$key]);
-        }
-
         try {
-            $statement = $this->connection->prepare(
-                $a = sprintf(
-                    'SELECT %s FROM %s WHERE %s = "%s" LIMIT 1',
-                    implode(',', $fields),
-                    $this->table,
-                    $idField,
-                    $id
-                )
-            );
+            $qb = $this->connection->createQueryBuilder()
+                ->select($fields)
+                ->from($this->table)
+                ->where(sprintf('%s = :id', $idField))
+                ->setParameter(':id', $id)
+                ->setMaxResults(1);
 
-            $statement->execute();
+            $item = $qb->execute()->fetch();
         } catch (\Doctrine\DBAL\Exception\TableNotFoundException $e) {
             return null;
         }
 
-        $item = $statement->fetch();
-
-        if ($item === false) {
+        if (empty($item)) {
             return null;
         }
 
