@@ -31,3 +31,9 @@ services:
     arguments: ["%kernel.environment%"]
     tags:
       - { name: 'dwo_flagging.voters', type: "environment" }
+
+  dwo_flagging_voters.voter.filters:
+    class: Dwo\FlaggingVoters\Voters\FiltersVoter
+    arguments: ["@dwo_flagging.voter.filter_groups"]
+    tags:
+      - { name: 'dwo_flagging.voters', type: "filters" }

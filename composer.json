@@ -22,7 +22,7 @@
     "doctrine/dbal": "~2.5",
     "dwo/tagged_services": "~1.0",
     "dwo/flagging": "0.2.*@dev",
-    "dwo/flagging_voters": "~1.0",
+    "dwo/flagging_voters": "dev-master",
     "dwo/config_prototype": "1.0.*@dev",
     "dwo/config_prototype_bundle": "1.0.*@dev"
   },
