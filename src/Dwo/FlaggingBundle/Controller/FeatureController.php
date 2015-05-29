@@ -13,7 +13,7 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Class FeatureController
  *
- * @author David Wolter <david@lovoo.com>
+ * @author Dave Www <davewwwo@gmail.com>
  */
 class FeatureController extends ContainerAware
 {

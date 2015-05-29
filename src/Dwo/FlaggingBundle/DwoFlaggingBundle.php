@@ -7,7 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
- * @author David Wolter <david@lovoo.com>
+ * @author Dave Www <davewwwo@gmail.com>
  */
 class DwoFlaggingBundle extends Bundle
 {

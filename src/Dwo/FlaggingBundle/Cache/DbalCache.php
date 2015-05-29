@@ -10,7 +10,7 @@ use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Types\Type;
 
 /**
- * @author David Wolter <david@lovoo.com>
+ * @author Dave Www <davewwwo@gmail.com>
  */
 class DbalCache extends CacheProvider
 {

@@ -10,7 +10,7 @@ use Dwo\ConfigPrototype\Model\ConfigPrototypeManagerInterface;
 /**
  * Class ConfigPrototypeManager
  *
- * @author David Wolter <david@lovoo.com>
+ * @author Dave Www <davewwwo@gmail.com>
  */
 class ConfigPrototypeManager implements ConfigPrototypeManagerInterface
 {

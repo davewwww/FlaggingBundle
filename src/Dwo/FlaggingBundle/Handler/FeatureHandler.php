@@ -8,7 +8,7 @@ use Dwo\ConfigPrototype\Model\ConfigPrototypeManagerInterface;
 /**
  * Class FeatureHandler
  *
- * @author David Wolter <david@lovoo.com>
+ * @author Dave Www <davewwwo@gmail.com>
  */
 class FeatureHandler
 {

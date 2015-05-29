@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\Definition;
 /**
  * Class DbalDefinition
  *
- * @author David Wolter <david@lovoo.com>
+ * @author Dave Www <davewwwo@gmail.com>
  */
 class DbalDefinition extends CacheDefinition
 {

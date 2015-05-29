@@ -7,7 +7,7 @@ use Dwo\ConfigPrototype\Model\ConfigPrototype;
 /**
  * Class Feature
  *
- * @author David Wolter <david@lovoo.com>
+ * @author Dave Www <davewwwo@gmail.com>
  */
 class Feature extends ConfigPrototype
 {
