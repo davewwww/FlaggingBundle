@@ -14,17 +14,10 @@
   ],
   "require": {
     "php": ">=5.4",
-    "symfony/config": "~2.4",
-    "symfony/dependency-injection": "~2.4",
-    "symfony/http-kernel": "~2.4",
-    "symfony/console": "~2.4",
-    "doctrine/cache": "^1.4",
-    "doctrine/dbal": "~2.5",
+    "symfony/framework-bundle": "~2.4",
     "dwo/tagged_services": "~1.0",
     "dwo/flagging": "0.2.*@dev",
-    "dwo/flagging_voters": "dev-master",
-    "dwo/config_prototype": "1.0.*@dev",
-    "dwo/config_prototype_bundle": "1.0.*@dev"
+    "dwo/flagging_voters": "dev-master"
   },
   "autoload": {
     "psr-0": {"Dwo\\FlaggingBundle": "src/"}

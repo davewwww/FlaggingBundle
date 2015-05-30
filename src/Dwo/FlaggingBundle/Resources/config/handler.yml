@@ -1,5 +1,0 @@
-services:
-
-  dwo_flagging.handler.feature:
-    class: Dwo\FlaggingBundle\Handler\FeatureHandler
-    arguments: ["@dwo_flagging.manager.feature.config_prototype"]

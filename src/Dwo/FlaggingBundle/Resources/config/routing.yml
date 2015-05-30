@@ -1,9 +1,0 @@
-read:
-    path:     /{featureName}
-    defaults: { _controller: Dwo\FlaggingBundle\Controller\FeatureController::readAction }
-    methods:  [GET]
-
-write:
-    path:     /{featureName}
-    defaults: { _controller: Dwo\FlaggingBundle\Controller\FeatureController::writeAction }
-    methods:  [POST]

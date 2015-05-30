@@ -2,6 +2,7 @@
 
 namespace Dwo\FlaggingBundle\Command;
 
+use Dwo\Flagging\Model\FeatureManagerInterface;
 use Dwo\Flagging\Serializer\FeatureSerializer;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -37,17 +38,18 @@ class FeaturesAllCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        /** @var FeatureManagerInterface $manager */
         $manager = $this->getContainer()->get('dwo_flagging.manager.feature');
 
         $feature = $input->getArgument('feature');
 
         if ($feature) {
             $feature = $manager->findFeatureByName($feature);
-            td($feature ? FeatureSerializer::serialize($feature) : 'not found');
+            $output->writeln($feature ? FeatureSerializer::serialize($feature) : 'not found');
         } else {
             $all = $manager->findAllFeatures();
             foreach ($all as $feature) {
-                tde($feature->getName().' = '.Yaml::dump(FeatureSerializer::serialize($feature)));
+                $output->writeln($feature->getName().' = '.Yaml::dump(FeatureSerializer::serialize($feature)));
             }
         }
     }

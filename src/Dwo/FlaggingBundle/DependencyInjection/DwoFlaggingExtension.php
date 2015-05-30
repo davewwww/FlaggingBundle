@@ -20,11 +20,9 @@ class DwoFlaggingExtension extends Extension
     {
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('decider.yml');
+        $loader->load('flagging_voter.yml');
         $loader->load('manager.yml');
         $loader->load('voter.yml');
-        $loader->load('validator.yml');
-        $loader->load('handler.yml');
-        $loader->load('flagging_voter.yml');
 
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);

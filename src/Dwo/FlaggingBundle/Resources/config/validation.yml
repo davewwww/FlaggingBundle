@@ -1,6 +1,0 @@
-Dwo\FlaggingBundle\Model\Form\Feature:
-  properties:
-    content:
-      - Dwo\ConfigPrototype\Validator\ConfigPrototype:
-          type: 'feature'
-      - Dwo\Flagging\Validator\VotersExists: ~

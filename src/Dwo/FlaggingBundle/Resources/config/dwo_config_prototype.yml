@@ -1,8 +1,0 @@
-dwo_config_prototype:
-
-  prototypes:
-
-    feature:
-      configuration_class: Dwo\FlaggingBundle\DependencyInjection\Configuration
-      prototype_path: dwo_flagging.features
-      manager: dwo_flagging.manager.feature.config_prototype

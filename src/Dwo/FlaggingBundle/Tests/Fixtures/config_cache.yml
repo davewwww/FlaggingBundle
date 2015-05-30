@@ -1,4 +1,0 @@
-dwo_flagging:
-  cache:
-    provider: foo
-    delegator: bar
