@@ -1,7 +1,9 @@
-services:
+parameters:
+  dwo_flagging.manager.feature.config.class: Dwo\FlaggingBundle\Config\FeatureManager
 
+services:
   dwo_flagging.manager.feature.config:
-    class: Dwo\FlaggingBundle\Config\FeatureManager
+    class: %dwo_flagging.manager.feature.config.class%
     arguments: ["%dwo_flagging.features%"]
 
   dwo_flagging.manager.voter.config:
