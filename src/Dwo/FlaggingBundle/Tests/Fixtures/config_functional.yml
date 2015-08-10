@@ -51,3 +51,10 @@ dwo_flagging:
           value: 4
         -
           value: 5
+
+
+    value_is_feature:
+      values:
+        -
+          value: "feature_value"
+          is_feature: true

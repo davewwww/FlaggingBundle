@@ -79,6 +79,7 @@ class Configuration implements ConfigurationInterface
                                          * Value
                                          */
                                         ->variableNode('value')->end()
+                                        ->booleanNode('is_feature')->end()
 
                                         /**
                                          *  Filter for Value
