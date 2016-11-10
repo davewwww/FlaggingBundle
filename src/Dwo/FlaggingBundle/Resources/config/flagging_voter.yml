@@ -1,39 +1,39 @@
 services:
 
   dwo_flagging_voters.voter.expression:
-    class: Dwo\FlaggingVoters\Voters\ExpressionVoter
+    class: 'Dwo\FlaggingVoters\Voters\ExpressionVoter'
     tags:
-      - { name: 'dwo_flagging.voters', type: "expression" }
+      - { name: 'dwo_flagging.voters', type: 'expression' }
 
   dwo_flagging_voters.voter.date_range:
-    class: Dwo\FlaggingVoters\Voters\DateRangeVoter
+    class: 'Dwo\FlaggingVoters\Voters\DateRangeVoter'
     tags:
-      - { name: 'dwo_flagging.voters', type: "date_range" }
+      - { name: 'dwo_flagging.voters', type: 'date_range' }
 
   dwo_flagging_voters.voter.random:
-    class: Dwo\FlaggingVoters\Voters\RandomVoter
+    class: 'Dwo\FlaggingVoters\Voters\RandomVoter'
     tags:
-      - { name: 'dwo_flagging.voters', type: "random" }
+      - { name: 'dwo_flagging.voters', type: 'random' }
 
   dwo_flagging_voters.voter.feature_name:
-    class: Dwo\FlaggingVoters\Voters\FeatureNameVoter
-    arguments: ["@dwo_flagging.feature_decider"]
+    class: 'Dwo\FlaggingVoters\Voters\FeatureNameVoter'
+    arguments: ['@dwo_flagging.feature_decider']
     tags:
-      - { name: 'dwo_flagging.voters', type: "feature" }
+      - { name: 'dwo_flagging.voters', type: 'feature' }
 
   dwo_flagging_voters.voter.enabled:
-    class: Dwo\FlaggingVoters\Voters\EnabledVoter
+    class: 'Dwo\FlaggingVoters\Voters\EnabledVoter'
     tags:
-      - { name: 'dwo_flagging.voters', type: "enabled" }
+      - { name: 'dwo_flagging.voters', type: 'enabled' }
 
   dwo_flagging_voters.voter.environment:
-    class: Dwo\FlaggingVoters\Voters\StringVoter
-    arguments: ["%kernel.environment%"]
+    class: 'Dwo\FlaggingVoters\Voters\StringVoter'
+    arguments: ['%kernel.environment%']
     tags:
-      - { name: 'dwo_flagging.voters', type: "environment" }
+      - { name: 'dwo_flagging.voters', type: 'environment' }
 
   dwo_flagging_voters.voter.filters:
-    class: Dwo\FlaggingVoters\Voters\FiltersVoter
-    arguments: ["@dwo_flagging.voter.filter_groups"]
+    class: 'Dwo\FlaggingVoters\Voters\FiltersVoter'
+    arguments: ['@dwo_flagging.voter.filter_groups']
     tags:
-      - { name: 'dwo_flagging.voters', type: "filters" }
+      - { name: 'dwo_flagging.voters', type: 'filters' }
